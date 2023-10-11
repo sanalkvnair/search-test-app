@@ -1,0 +1,42 @@
+<h1 style="text-align: center">
+	Enter search keywords below to count number of hits.
+</h1>
+<form [formGroup]="inputForm">
+	<mat-form-field style="width: 100%" appearance="outline">
+		<mat-label>Search keywords</mat-label>
+		<input
+			maxlength="100"
+			matInput
+			formControlName="inputString"
+			(keyup.enter)="getCount()"
+		/>
+	</mat-form-field>
+	<section>
+		<div class="search-button-row">
+			<button mat-raised-button type="reset" (click)="reset()">Reset</button>
+			<button
+				mat-raised-button
+				color="primary"
+				type="submit"
+				[disabled]="!inputForm.valid"
+				(click)="getCount()"
+				[class.spinner]="loading"
+				[disabled]="loading"
+			>
+				Submit
+			</button>
+		</div>
+	</section>
+</form>
+<div *ngIf="loading">
+	<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+<mat-divider></mat-divider>
+<div *ngIf="queryData">
+	<mat-card>
+		<mat-card-content
+			>Total number of hits:
+			{{ queryData.totalHits | number }}</mat-card-content
+		>
+	</mat-card>
+</div>
