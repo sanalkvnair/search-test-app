@@ -19,11 +19,8 @@ public class Utility {
             Matcher matcher = pattern.matcher(input);
 
             if (matcher.find()) {
-                String startRange = matcher.group(1);
-                String endRange = matcher.group(3);
                 String totalResults = matcher.group(5);
-
-                return Long.parseLong(totalResults.replaceAll(",",""));
+                return totalResults != null ? Long.parseLong(totalResults.replaceAll(",","")) : 0L;
             }
         }
 
@@ -39,9 +36,16 @@ public class Utility {
      * @return Long
      */
     public static Long extractSogouResult(String input) {
-        if(input != null && input.length() > 13) {
-            String newInput = input.substring(8,input.length()-5).replaceAll(",","");
-            return Long.parseLong(newInput);
+        if (input != null) {
+            String regexPattern = "搜狗已为您找到约(\\d{1,3}(,\\d{3})*)(?:条)?相关结果";
+
+            Pattern pattern = Pattern.compile(regexPattern);
+            Matcher matcher = pattern.matcher(input);
+
+            if (matcher.find()) {
+                String totalResults = matcher.group(1);
+                return totalResults != null ? Long.parseLong(totalResults.replaceAll(",","")) : 0L;
+            }
         }
         return 0L;
     }
